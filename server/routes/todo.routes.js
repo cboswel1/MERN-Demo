@@ -1,52 +1,50 @@
-const { DH_CHECK_P_NOT_SAFE_PRIME } = require("constants");
+const router = require('express').Router();
+const { Todo } = require('../models');
 
-const router = require("express").Router();
-
-// api todo/
+// restful api
+// /api/todo/
 router
-  .route("/")
+  .route('/')
   .get((req, res) => {
-    Todo.find({})
+    Todo
+      .find({})
       .then(data => {
-        console.log("Todo Get");
-        console.log({ data });
-        res.json({ success: true });
+        res.json({ success: true, data });
       })
       .catch(err => {
-        console.log({ err });
         res.json({ success: false });
       });
   })
   .post((req, res) => {
     console.log({ reqBody: req.body });
 
-    Todo.create({
-      text: req.body.text,
-    })
+    Todo
+      .create({
+        text: req.body.text
+      })
       .then(data => {
-        console.log({ data });
-        res.json({ success: true });
+        res.json({ success: true, data });
       })
       .catch(err => {
-        console.log({ err });
-        res.json({ success: true });
+        res.json({ success: false });
       });
   });
 
-// /api/todo/:id
-router.route("/:id").delete((req, res) => {
-  console.log(req.params);
 
-    Todo 
-        .findByIdAndDelete(req.params.id)
-        .then(data => {
-            console.log({data}); 
-            res.json({ success: true})
-        })
-        .catch(err => {
-            console.log({err})
-            res.json({success: false})
-        })
-});
+// /api/todo/:id
+router
+  .route('/:id')
+  .delete((req, res) => {
+    console.log(req.params);
+
+    Todo
+      .findByIdAndDelete(req.params.id)
+      .then(data => {
+        res.json({ success: true });
+      })
+      .catch(err => {
+        res.json({ success: false });
+      });
+  });
 
 module.exports = router;
